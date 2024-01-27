@@ -35,16 +35,46 @@ int initialize_pop_repository()
     return 0;
 }
 
-string sha1(const std::string& input) {
+string sha1(const std::string &input)
+{
     unsigned char hash[SHA_DIGEST_LENGTH];
-    SHA1((unsigned char*)input.c_str(), input.length(), hash);
+    SHA1((unsigned char *)input.c_str(), input.length(), hash);
 
     std::stringstream ss;
-    for(int i = 0; i < SHA_DIGEST_LENGTH; i++) {
+    for (int i = 0; i < SHA_DIGEST_LENGTH; i++)
+    {
         ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];
     }
 
     return ss.str();
+}
+
+string sha1_first_two(const std::string &input)
+{
+    unsigned char hash[SHA_DIGEST_LENGTH];
+    SHA1((unsigned char *)input.c_str(), input.length(), hash);
+
+    std::stringstream ss;
+    for (int i = 0; i < 2; i++)
+    {
+        ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];
+    }
+
+    return ss.str();
+}
+string cat_file(string sha)
+{
+    const string &path = filesystem::current_path().string();
+    string file_path = path + "/.pop/objects/" + sha1_first_two(sha) + "/" + sha.substr(2);
+    if (!filesystem::exists(file_path))
+    {
+        cout << "File does not exist" << endl;
+        return "";
+    }
+
+    ifstream file(file_path);
+    string content((istreambuf_iterator<char>(file)), (istreambuf_iterator<char>()));
+    return content;
 }
 
 int clone(string url, string directory)
@@ -65,6 +95,10 @@ int main(int argc, char *argv[])
         cout << "No command provided" << endl;
         return 1;
     }
+
+    string sha = sha1("Hello World");
+    cout << sha << endl;
+    cout << sha1_first_two("Hello World") << endl;
 
     string command = argv[1];
 
@@ -97,8 +131,6 @@ int main(int argc, char *argv[])
         {
             string url = argv[2];
             string directory = argv[3];
-
-
         }
     }
     else
