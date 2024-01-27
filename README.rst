@@ -8,5 +8,7 @@ The idea is to implement a simple git-like SCM using C++, and have it implement 
 7. `rebase` - rebase the current branch on top of another branch
 8. `squash` - squash commits into one
 9. `cherry-pick` - pick a commit from another branch and apply it to the current branch
+10. `hash-object` - hash an object
+11. `cat-file` - show the contents of an object
 
 I'm not re-inventing the WHL, I'm just learning git and C++. 
