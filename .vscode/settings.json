@@ -1,0 +1,22 @@
+{
+    "files.associations": {
+        "iostream": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp",
+        "string": "cpp",
+        "cctype": "cpp",
+        "cstdlib": "cpp",
+        "cwchar": "cpp",
+        "*.tcc": "cpp",
+        "compare": "cpp",
+        "cstdint": "cpp",
+        "algorithm": "cpp",
+        "memory_resource": "cpp",
+        "string_view": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp",
+        "initializer_list": "cpp",
+        "iosfwd": "cpp",
+        "new": "cpp"
+    }
+}
