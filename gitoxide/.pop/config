@@ -3,3 +3,5 @@
 	filemode = true
 	bare = false
 	logallrefupdates = true
+[remote "origin"]
+	url = https://github.com/Byron/gitoxide
