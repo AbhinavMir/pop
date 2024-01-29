@@ -5,38 +5,100 @@
 #include <sstream>
 #include <iomanip>
 
-class Repository {
+class Crypto
+{
 public:
-    Repository(const std::string& path) : repoPath(path) {
-        if (!std::filesystem::exists(repoPath + "/.pop")) {
-            initialize();
-        }
-    }
+	std::string sha1(const std::string &input)
+	{
+		unsigned char hash[SHA_DIGEST_LENGTH];
+		SHA1(reinterpret_cast<const unsigned char *>(input.c_str()), input.length(), hash);
 
-	std::string getRepoPath() const {
+		std::stringstream ss;
+		for (int i = 0; i < SHA_DIGEST_LENGTH; i++)
+		{
+			ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(hash[i]);
+		}
+
+		return ss.str();
+	}
+
+	std::string sha1_first_two(const std::string &input)
+	{
+		unsigned char hash[SHA_DIGEST_LENGTH];
+		SHA1(reinterpret_cast<const unsigned char *>(input.c_str()), input.length(), hash);
+
+		std::stringstream ss;
+		for (int i = 0; i < 2; i++)
+		{
+			ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(hash[i]);
+		}
+
+		return ss.str();
+	}
+}
+
+class RepositoryManager
+{
+public:
+	Repository(const std::string &path) : repoPath(path)
+	{
+		if (!std::filesystem::exists(repoPath + "/.pop"))
+		{
+			initialize();
+		}
+	}
+
+	std::string getRepoPath() const
+	{
 		return repoPath;
 	}
 
+	std::int initializeRepository(const std::string &path = std::filesystem::current_path().string())
+	{
+		if (std::filesystem::exists(path + "/.pop"))
+		{
+			std::cout << "Already a pop repository" << std::endl;
+			return 1;
+		}
+
+		std::cout << "Initializing pop repository in " << std::filesystem::current_path().string() << std::endl;
+		std::filesystem::create_directories(path + "/.pop/objects");
+		std::filesystem::create_directories(path + "/.pop/refs/heads");
+		std::filesystem::create_directories(path + "/.pop/refs/tags");
+
+		std::ofstream head_file(path + "/.pop/HEAD");
+		head_file << "ref: refs/heads/master\n";
+		head_file.close();
+
+		std::ofstream config_file(path + "/.pop/config");
+		config_file << "[core]\n\trepositoryformatversion = 0\n\tfilemode = true\n\tbare = false\n\tlogallrefupdates = true\n";
+		config_file.close();
+
+		std::ofstream description_file(path + "/.pop/description");
+		description_file << "Unnamed repository; edit this file 'description' to name the repository.\n";
+		description_file.close();
+
+		return 0;
+	}
 
 private:
-    std::string repoPath;
-
-    void initialize() {
-        // Initialization logic...
-    }
+	std::string repoPath;
 };
 
-class SHA1Hasher {
+class SHA1Hasher
+{
 public:
-    static std::string hash(const std::string& input) {
-        unsigned char hash[SHA_DIGEST_LENGTH];
-        SHA1(reinterpret_cast<const unsigned char*>(input.c_str()), input.length(), hash);
-        std::stringstream ss;
-        for (int i = 0; i < SHA_DIGEST_LENGTH; i++) {
-            ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(hash[i]);
-        }
-        return ss.str();
-    }
+	static std::string hash(const std::string &input)
+	{
+		unsigned char hash[SHA_DIGEST_LENGTH];
+		SHA1(reinterpret_cast<const unsigned char *>(input.c_str()), input.length(), hash);
+		std::stringstream ss;
+		for (int i = 0; i < SHA_DIGEST_LENGTH; i++)
+		{
+			ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(hash[i]);
+		}
+		return ss.str();
+	}
 };
 
 // Usage in main or other functions...

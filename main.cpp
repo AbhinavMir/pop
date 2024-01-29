@@ -10,33 +10,33 @@
 #include <curl/curl.h>
 using namespace std;
 
-int initialize_pop_repository(const string &path = filesystem::current_path().string())
-{
-	if (filesystem::exists(path + "/.pop"))
-	{
-		cout << "Already a pop repository" << endl;
-		return 1;
-	}
+// int initialize_pop_repository(const string &path = filesystem::current_path().string())
+// {
+// 	if (filesystem::exists(path + "/.pop"))
+// 	{
+// 		cout << "Already a pop repository" << endl;
+// 		return 1;
+// 	}
 
-	cout << "Initializing pop repository in " << filesystem::current_path().string() << endl;
-	filesystem::create_directories(path + "/.pop/objects");
-	filesystem::create_directories(path + "/.pop/refs/heads");
-	filesystem::create_directories(path + "/.pop/refs/tags");
+// 	cout << "Initializing pop repository in " << filesystem::current_path().string() << endl;
+// 	filesystem::create_directories(path + "/.pop/objects");
+// 	filesystem::create_directories(path + "/.pop/refs/heads");
+// 	filesystem::create_directories(path + "/.pop/refs/tags");
 
-	ofstream head_file(path + "/.pop/HEAD");
-	head_file << "ref: refs/heads/master\n";
-	head_file.close();
+// 	ofstream head_file(path + "/.pop/HEAD");
+// 	head_file << "ref: refs/heads/master\n";
+// 	head_file.close();
 
-	ofstream config_file(path + "/.pop/config");
-	config_file << "[core]\n\trepositoryformatversion = 0\n\tfilemode = true\n\tbare = false\n\tlogallrefupdates = true\n";
-	config_file.close();
+// 	ofstream config_file(path + "/.pop/config");
+// 	config_file << "[core]\n\trepositoryformatversion = 0\n\tfilemode = true\n\tbare = false\n\tlogallrefupdates = true\n";
+// 	config_file.close();
 
-	ofstream description_file(path + "/.pop/description");
-	description_file << "Unnamed repository; edit this file 'description' to name the repository.\n";
-	description_file.close();
+// 	ofstream description_file(path + "/.pop/description");
+// 	description_file << "Unnamed repository; edit this file 'description' to name the repository.\n";
+// 	description_file.close();
 
-	return 0;
-}
+// 	return 0;
+// }
 
 string sha1(const string &input)
 {
@@ -65,6 +65,7 @@ string sha1_first_two(const string &input)
 
 	return ss.str();
 }
+
 string cat_file(string sha)
 {
 	const string &path = filesystem::current_path().string();
