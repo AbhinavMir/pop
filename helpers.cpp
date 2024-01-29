@@ -6,10 +6,12 @@
 #include <iomanip>
 #include <iostream>
 
+#define GIT_PROTOCOL_POR 9418
+
 class BlobManager
 {
 public:
-	std::string sha1_first_two(const std::string& sha)
+	std::string sha1_first_two(const std::string &sha)
 	{
 		// Assuming this function returns the first two characters of the SHA1 hash
 		return sha.substr(0, 2);
@@ -111,3 +113,36 @@ public:
 private:
 	std::string repoPath;
 };
+
+class GitNetworkProtocol
+{
+public:
+	int getFromLocalRepository(const std::string &sha)
+	{
+		return 0;
+	}
+
+	int getFromSmartHTTP(const std::string &sha)
+	{
+		return 0;
+	}
+
+	int getFromDumbHTTP(const std::string &sha)
+	{
+		return 0;
+	}
+
+	int getFromGitProtocol(const std::string &sha)
+	{
+		return 0;
+	}
+}
+
+class Authentication
+{
+public:
+	int authenticate(const std::string &username, const std::string &password)
+	{
+		return 0;
+	}
+}
