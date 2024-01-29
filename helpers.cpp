@@ -4,6 +4,33 @@
 #include <openssl/sha.h>
 #include <sstream>
 #include <iomanip>
+#include <iostream>
+
+class BlobManager
+{
+public:
+	std::string sha1_first_two(const std::string& sha)
+	{
+		// Assuming this function returns the first two characters of the SHA1 hash
+		return sha.substr(0, 2);
+	}
+
+	std::string cat_file(std::string sha)
+	{
+		const std::string &path = std::filesystem::current_path().string();
+		std::string file_path = path + "/.pop/objects/" + sha1_first_two(sha) + "/" + sha.substr(2);
+
+		if (!std::filesystem::exists(file_path))
+		{
+			std::cout << "File does not exist" << std::endl;
+			return "";
+		}
+
+		std::ifstream file(file_path);
+		std::string content((std::istreambuf_iterator<char>(file)), (std::istreambuf_iterator<char>()));
+		return content;
+	}
+};
 
 class Crypto
 {
@@ -84,21 +111,3 @@ public:
 private:
 	std::string repoPath;
 };
-
-class SHA1Hasher
-{
-public:
-	static std::string hash(const std::string &input)
-	{
-		unsigned char hash[SHA_DIGEST_LENGTH];
-		SHA1(reinterpret_cast<const unsigned char *>(input.c_str()), input.length(), hash);
-		std::stringstream ss;
-		for (int i = 0; i < SHA_DIGEST_LENGTH; i++)
-		{
-			ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(hash[i]);
-		}
-		return ss.str();
-	}
-};
-
-// Usage in main or other functions...
